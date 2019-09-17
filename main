@@ -34,9 +34,8 @@ func rad(d float64, flag bool) (radTude float64) {
 }
 
 // 转化坐标点
-func location(radLat, radLon float64)(x, y, z float64) {
-	x = EARTHRADIUS * math.Cos(radLon) * math.Sin(radLat)
-	y = EARTHRADIUS * math.Sin(radLon) * math.Sin(radLat)
-	z = EARTHRADIUS * math.Cos(radLat)
+func location(radLat, radLon float64) (x, y, z float64) {
+	tv := EARTHRADIUS * math.Sin(radLat)
+	x, y, z = math.Cos(radLon) * tv, math.Sin(radLon) * tv, EARTHRADIUS*math.Cos(radLat)
 	return
 }
