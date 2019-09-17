@@ -1,0 +1,42 @@
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+
+const (
+	//赤道半径(单位km)
+    EARTHRADIUS = 6378.137
+)
+
+func main() {
+	dist := latitudeLongitudeDistance(115.076076746,22.618992477300004, 115.0776968002, 22.619670872500013)
+	fmt.Println("====km====", dist) // 返回的单位是km
+}
+
+// 根据经纬度计算两点之间的距离,会有偏差
+func latitudeLongitudeDistance(curLon, curLat, distLon, distLat float64) float64 {
+	x1, y1, z1 := location(rad(curLat, false), rad(curLon, true))
+	x2, y2, z2 := location(rad(distLat, false), rad(distLon, true))
+	d := math.Sqrt(math.Pow(x1-x2, 2)+math.Pow(y1-y2, 2)+math.Pow(z1-z2, 2))
+	theta := math.Acos(1-(math.Pow(d,2)/(2*math.Pow(EARTHRADIUS,2))))
+	return theta * EARTHRADIUS
+}
+
+// 转化为弧度(rad)
+func rad(d float64, flag bool) (radTude float64) {
+	if radTude =  d * math.Pi / 180.0; radTude < 0 && !flag {
+		return math.Pi/2 + math.Abs(radTude)
+	}
+	return math.Pi/2 - math.Abs(radTude)
+}
+
+// 转化坐标点
+func location(radLat, radLon float64)(x, y, z float64) {
+	x = EARTHRADIUS * math.Cos(radLon) * math.Sin(radLat)
+	y = EARTHRADIUS * math.Sin(radLon) * math.Sin(radLat)
+	z = EARTHRADIUS * math.Cos(radLat)
+	return
+}
